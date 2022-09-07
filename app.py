@@ -25,8 +25,12 @@ def index():
     # return render_template('index.html')
 
     # the return value of the function can be an html template and an input
-    return render_template('index.html', custom_input='Ali Naseri')
+    return render_template('index.html')
 
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 # this command only starts the server. If you do not provide where the app should look into, it gives the "Not found" error
 # to avoid this issue, routers using decorators must be added before here
 if __name__ == '__main__':
