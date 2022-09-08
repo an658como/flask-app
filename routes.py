@@ -1,6 +1,9 @@
 # from app module, import the app instance
 from app import app
 from flask import render_template
+import forms
+
+
 
 # this points to the root folder of the server
 # multiple decorators can be used for a function
@@ -23,4 +26,5 @@ def index():
 
 @app.route('/about')
 def about():
-    return render_template('about.html')
+    form = forms.AddTaskForm()
+    return render_template('about.html', form=form)

@@ -8,6 +8,8 @@ from flask import Flask, render_template
 
 # instanciate the Flask class. The object name is app by convention
 app = Flask(__name__) # the variable name is passed for initialization
+# secret key added here to avoid the csrf_token blockage
+app.config['SECRET_KEY'] = 'sample_key'
 
 # import all routes from the routes module 
 from routes import *
