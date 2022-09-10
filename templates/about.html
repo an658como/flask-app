@@ -7,7 +7,14 @@
     {{ form.title.label }}
     {{ form.title }}
     {{ form.submit }}
-</post>   
+</post> 
+
+<!--add a block here to use the data that is submitted to the form-->>
+{% if title %}
+   <h1> {{ title }} </h1>
+{% endif %}
+
+
 {% endblock main %}
 
 

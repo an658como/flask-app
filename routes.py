@@ -23,8 +23,18 @@ def index():
     # the return value of the function can be an html template and an input
     return render_template('index.html')
 
-
-@app.route('/about')
+# routes are set to be compatible with GET by default. In case you need
+# to includee POST, you should consider it in the route definition
+# the actions must be provided in a list that is called methods
+@app.route('/about', methods=['GET', 'POST'])
 def about():
     form = forms.AddTaskForm()
+    # now that the POST action is activated, we can have access to the forms data
+    
+    # check if the data exists:
+    if form.validate_on_submit():
+        # print the data on console
+        print(form.title.data)
+        # as an example pass the data back to the about form
+        return render_template('about.html', form=form, title=form.title.data)
     return render_template('about.html', form=form)
