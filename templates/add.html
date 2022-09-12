@@ -1,19 +1,21 @@
 {% extends 'base.html' %}
 
 {% block main %}
-<p>Some content on the about page</P>
-<form action="/add" method="post"> 
-    {{ form.csrf_token }}
-    {{ form.title.label }}
-    {{ form.title }}
-    {{ form.submit }}
-</post> 
 
-<!--add a block here to use the data that is submitted to the form-->>
-{% if title %}
-   <h1> {{ title }} </h1>
-{% endif %}
-
+<div class="container-fluid">
+    <form action="{{ url_for('add') }}" method="post">
+        {{ form.hidden_tag() }}
+            <div class="row">
+                <h3> Add Task </h3>
+                <div class="col">
+                    {{ form.title(class="form-control") }}
+                </div>
+                <div class="col">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </div>
+    </form>
+</div>
 
 {% endblock main %}
 

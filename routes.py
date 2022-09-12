@@ -2,7 +2,7 @@
 #                , import the db instace
 from app import app, db
 # form flask module, import two other functions for URL and Redirecting
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, flash, get_flashed_messages
 import forms
 # from module models, import the Task class for your data model
 from models import Task
@@ -42,6 +42,39 @@ def add():
         t = Task(title=form.title.data, date=datetime.utcnow())
         db.session.add(t)
         db.session.commit()
+        # print a message using flash
+        flash('Task added to the database')
         # return to the index page after recieving data
         return redirect(url_for('index'))
     return render_template('add.html', form=form)
+
+
+# now it's time to add functionality for editing a task
+# we need a new route for edit
+# this time, in the route address, there is a second field which is for passing information 
+# between the page to the backend
+@app.route('/edit/<int:task_id>', methods=['GET', 'POST'])
+def edit(task_id):
+    # the edit page is kind of similar to the add page
+    # get the task information from the database
+    task = Task.query.get(task_id)
+    # we should create a form for the communication of the data
+    form = forms.AddTaskForm()
+    print(task)
+
+    
+    # check if the taks exists, maybe someone provides a wrong task id
+    if task:
+        # if the submission on the form is activated update the data in the database:
+        if form.validate_on_submit():
+            task.title = form.title.data
+            task.date = datetime.utcnow()
+            db.session.commit()
+            flash('Task has been updated')
+            return redirect(url_for('index'))        
+
+        form.title.data = task.title
+        # render the edit html page to show the available task data
+        return render_template('edit.html', form=form, task_id=task_id)
+    # go to the index page if none of the above happend
+    return redirect(url_for('index'))
