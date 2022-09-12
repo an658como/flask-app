@@ -1,5 +1,6 @@
 # from app module, import the app instance
 #                , import the db instace
+from re import T
 from app import app, db
 # form flask module, import two other functions for URL and Redirecting
 from flask import render_template, redirect, url_for, flash, get_flashed_messages
@@ -76,5 +77,31 @@ def edit(task_id):
         form.title.data = task.title
         # render the edit html page to show the available task data
         return render_template('edit.html', form=form, task_id=task_id)
+    else:
+        flash('Task was not found.')
+    # go to the index page if none of the above happend
+    return redirect(url_for('index'))
+
+@app.route('/delete/<int:task_id>', methods=['GET', 'POST'])
+def delete(task_id):
+
+    task = Task.query.get(task_id)
+    form = forms.DeleteTaskForm()
+
+    
+    # check if the taks exists, maybe someone provides a wrong task id
+    if task:
+        # if the submission on the form is activated update the data in the database:
+        if form.validate_on_submit():
+            db.session.delete(task)
+            db.session.commit()
+            flash('Task has been deleted')
+            return redirect(url_for('index'))        
+
+
+        # render the edit html page to show the available task data
+        return render_template('delete.html', form=form, task_id=task_id, title=task.title)
+    else:
+        flash('Task was not found')
     # go to the index page if none of the above happend
     return redirect(url_for('index'))
